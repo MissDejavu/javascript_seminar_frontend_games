@@ -4,7 +4,8 @@ import { GamesService } from '@app/services/custom/games/games.service';
 import { QuizUpdate } from '../messages/quizUpdate';
 import { Quiz } from "../model/quiz";
 
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { getTreeNoValidDataSourceError } from '@angular/cdk/tree';
 
 
 @Component({
@@ -26,8 +27,6 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
   timeLimit: number = 30;
   timeLeftSeconds: number = this.timeLimit;
   timeInterval;
-  leftAnswers : string[] = ["a", "b"];
-  rightAnswers : string[] = ["c", "dwoakadwo"];
 
   constructor(public gamesService: GamesService) {
     this.quizUpdate = {
@@ -43,16 +42,16 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
     }
   }
 
+
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
-    console.log(this.leftAnswers);
   }
 
   ngOnInit(): void {
@@ -90,6 +89,7 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
   onNextQuestion(): void {
     this.quizUpdate.quizIndex = (this.quizUpdate.quizIndex + 1) % this.quizUpdate.quizes.length;
     this.currentQuiz = this.quizUpdate.quizes[this.quizUpdate.quizIndex];
+    console.log(this.quizUpdate.quizIndex)
     this.sendUpdateGame();
   }
   /*
@@ -101,6 +101,7 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
     } else {
       this.quizUpdate.quizIndex--;
     }
+    console.log(this.quizUpdate.quizIndex)
     this.currentQuiz = this.quizUpdate.quizes[this.quizUpdate.quizIndex];
     this.sendUpdateGame();
   }
@@ -148,17 +149,19 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
     this.gamesService.sendUpdate(this.quizUpdate);
   }
 
-  getBackgroundColor(answer) {
+  getBackgroundColorSelection(answer) {
     if (this.quizUpdate.quizOver == true && this.quizUpdate.quizes.length != 0) {
+
+      let i = this.quizUpdate.quizes[this.quizUpdate.quizIndex].answers.indexOf(answer);
       // Correct solution selected
       if ((
         this.quizUpdate.quizes[this.quizUpdate.quizIndex].selectedAnswers.includes(answer)
-        && this.quizUpdate.quizes[this.quizUpdate.quizIndex].correctAnswers.includes(answer)
+        && this.quizUpdate.quizes[this.quizUpdate.quizIndex].correctAnswers.includes(i)
       ) ||
-      // Wrong solution not selected
+        // Wrong solution not selected
         (
           !this.quizUpdate.quizes[this.quizUpdate.quizIndex].selectedAnswers.includes(answer)
-          && !this.quizUpdate.quizes[this.quizUpdate.quizIndex].correctAnswers.includes(answer)
+          && !this.quizUpdate.quizes[this.quizUpdate.quizIndex].correctAnswers.includes(i)
         )) {
         return "green";
       }
@@ -168,5 +171,37 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
     } else {
       return "white";
     }
+  }
+
+  /*
+  Color the cards once the game is finished to provide feedback.
+  */
+  getBackgroundColorMatching(answer, position) {
+    // White while in Progress
+    if (!this.quizUpdate.quizOver) {
+      return "white";
+    }
+    let correctAnswers = this.quizUpdate.quizes[this.quizUpdate.quizIndex].correctAnswers;
+    let indexAnswers = this.quizUpdate.quizes[this.quizUpdate.quizIndex].answers.indexOf(answer);
+    let selectedAnswerMatch = [];
+    if (position == "left") {
+      let indexLeft = this.currentQuiz.leftAnswers.indexOf(answer);
+      let indexAnswersMatch = this.quizUpdate.quizes[this.quizUpdate.quizIndex].answers.indexOf(this.currentQuiz.rightAnswers[indexLeft]);
+      selectedAnswerMatch = [indexAnswers, indexAnswersMatch];
+      // Check if [indexAnswers, indexAnswersMatch] is in Array
+    } else if (position == "right") {
+      let indexRight = this.currentQuiz.rightAnswers.indexOf(answer);
+      let indexAnswersMatch = this.quizUpdate.quizes[this.quizUpdate.quizIndex].answers.indexOf(this.currentQuiz.leftAnswers[indexRight]);
+      selectedAnswerMatch = [indexAnswersMatch, indexAnswers];
+    }
+    for (var i = 0; i < correctAnswers.length; i++) {
+      if ((correctAnswers[i][0] == selectedAnswerMatch[0] && correctAnswers[i][1] == selectedAnswerMatch[1])
+        || (correctAnswers[i][0] == selectedAnswerMatch[1] && correctAnswers[i][1] == selectedAnswerMatch[0]
+        )
+      ) {
+        return "green";
+      }
+    }
+    return "red";
   }
 }
