@@ -89,7 +89,7 @@ const drawitGame = mongoose.model("DrawIt", drawitSchema);
 const quizSchema = new mongoose.Schema({
     name: String,
     description: String,
-    questions: Object
+    questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'QuizQuestion'}]
 });
 const quizGame = mongoose.model("QuizGame", quizSchema);
 
@@ -123,17 +123,12 @@ app.get('/games/quiz/quizzes/:id', (req, res) => {
             return res.sendStatus(404)
         }
         if (game == null) return res.sendStatus(404);
-        var allquestions = [];
-        game.questions.forEach(element => {
-            quizQuestion.findById(element, (err1, qst) => {
-                if (err1) console.error(err1);
-                allquestions.push(qst.toJSON());
-                if (allquestions.length === game.questions.length) {
-                    game.questions = allquestions;
-                    res.status(200).json(game.toJSON());
-                }
-            })
-        });
+        game.populate('questions').execPopulate((err, quiz) => {
+            if (err) return console.error(err);
+           res.status(200).json(quiz.toJSON())
+
+       })
+       
 
     })
 
@@ -148,16 +143,11 @@ app.get('/games/quiz/quizzes/:id/questions', (req, res) => {
             return res.sendStatus(404)
         }
         if (game == null) return res.sendStatus(404);
-        var allquestions = [];
-        game.questions.forEach(element => {
-            quizQuestion.findById(element, (err1, qst) => {
-                if (err1) console.error(err1);
-                allquestions.push(qst.toJSON());
-                if (allquestions.length === game.questions.length) {
-                    res.status(200).json(allquestions);
-                }
-            })
-        });
+        game.populate('questions').execPopulate((err, quiz) => {
+            if (err) return console.error(err);
+            res.status(200).json(quiz.toJSON().questions)
+        })
+        
     })
 });
 
@@ -357,9 +347,8 @@ app.get('/games/alias/:id', (req, res) => {
 app.post('/games/alias/create', (req, res) => {
     const newGame = new aliasGame(req.body);
     newGame.save((err, newGame) => {
-        if (err) return console.error(err);
+        if (err || newGame == null) return console.error(err);
         else {
-            console.log(`Game with id ${newGame.get('_id')} saved`);
             res.status(200).json(newGame.toJSON());
         }
     });
@@ -368,13 +357,12 @@ app.post('/games/alias/create', (req, res) => {
 // @swagger
 app.put('/games/alias/:id', (req, res) => {
 
-    aliasGame.findByIdAndUpdate(req.params.id, { name: req.body.name, description: req.body.description, words: req.body.words }, (err, game) => {
+    aliasGame.findByIdAndUpdate(req.params.id, { name: req.body.name, description: req.body.description, words: req.body.words }, {new: true}, (err, game) => {
         if (err)
             return console.error(err);
         else {
             if (game == null) return res.sendStatus(404);
-            console.log(`Game with id ${req.params.id} updated`);
-            res.sendStatus(200);
+            res.json(game.toJSON());
         }
     })
 });

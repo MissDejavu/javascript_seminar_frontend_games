@@ -99,6 +99,10 @@ paths:
       summary: update alias game
       operationId: updateAlias
       desctiption: update alias game
+      produces: 
+        - application/json
+      consumes:
+        - application/json
       parameters:
       - in: path
         name: id
@@ -115,6 +119,8 @@ paths:
       responses:
         200:
           description: updated successfully 
+          schema: 
+            $ref: '#/definitions/AliasGame'
         404:
           description: no such game
     
