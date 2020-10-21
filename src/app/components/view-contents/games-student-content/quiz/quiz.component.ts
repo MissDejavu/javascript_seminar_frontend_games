@@ -16,7 +16,7 @@ import { getTreeNoValidDataSourceError } from '@angular/cdk/tree';
 export class GamesQuizComponent implements OnInit, OnDestroy {
 
   // finished to notify parent component
-  @Output() finished = new EventEmitter<boolean>();
+  @Output() disconnect = new EventEmitter<string>();
   @Input() username: string;
   @Input() sessionId: string;
   @Input() taskId: string;
@@ -26,7 +26,8 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
   currentQuiz: Quiz;
   timeLimit: number = 30;
   timeLeftSeconds: number = this.timeLimit;
-  timeInterval;
+  timeInterval;    
+  showHelp : boolean = false;
 
   constructor(public gamesService: GamesService) {
     this.quizUpdate = {
@@ -34,6 +35,7 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
       sessionId: this.sessionId,
       players: [this.username],
       quizes: [],
+      state: "lobby",
       getSolution: false,
       quizIndex: 0,
       countDownStarted: false,
@@ -73,7 +75,6 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
     this.quizUpdate.getSolution = true;
     this.quizUpdate.quizOver = true;
     this.gamesService.sendUpdate(this.quizUpdate);
-    this.finished.emit(true);
   }
 
   onGameOver(): void {
@@ -113,8 +114,10 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
   // Start timer and notify others
   onStartQuiz(): void {
     this.setTimer();
+    this.quizUpdate.state = "running";
     this.quizUpdate.countDownStarted = true;
     this.gamesService.sendUpdate(this.quizUpdate);
+    
   }
 
   setTimer(): void {
@@ -202,5 +205,15 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
       }
     }
     return "red";
+  }
+
+
+  toggleHelp() {
+    this.showHelp = !this.showHelp;
+    console.log(this.quizUpdate.state);
+  }
+
+  disconnectGame() {
+    this.disconnect.emit("disconnect");
   }
 }

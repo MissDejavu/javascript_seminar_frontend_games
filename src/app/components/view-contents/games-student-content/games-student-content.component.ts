@@ -33,8 +33,5 @@ export class GamesStudentContentComponent implements OnInit {
     this.gameJoined = false;
   }
 
-  onFinished() {
-    console.log("Game Finished TODO");
-  }
 
 }
