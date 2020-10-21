@@ -21,9 +21,4 @@
         <app-alias [username]="username" [taskId]="taskId" [sessionId]="sessionId"></app-alias>
         <button (click)="onDisconnect()">Disconnect</button>
     </div>
-
-    <div *ngIf="devMode" class="debugMessages" style="position: absolute;bottom: 0px; ">
-        {{this.debugMessage}}
-    </div>
-
 </div>
