@@ -89,7 +89,6 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
   onNextQuestion(): void {
     this.quizUpdate.quizIndex = (this.quizUpdate.quizIndex + 1) % this.quizUpdate.quizes.length;
     this.currentQuiz = this.quizUpdate.quizes[this.quizUpdate.quizIndex];
-    console.log(this.quizUpdate.quizIndex)
     this.sendUpdateGame();
   }
   /*
@@ -101,7 +100,6 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
     } else {
       this.quizUpdate.quizIndex--;
     }
-    console.log(this.quizUpdate.quizIndex)
     this.currentQuiz = this.quizUpdate.quizes[this.quizUpdate.quizIndex];
     this.sendUpdateGame();
   }
