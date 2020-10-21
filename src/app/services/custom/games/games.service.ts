@@ -1,4 +1,4 @@
-import { Injectable , EventEmitter} from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { JoinGameMessage } from '../../../components/view-contents/games-student-content/messages/joinGame';
 
@@ -48,15 +48,15 @@ export class GamesService extends Socket {
   }
 
   // Recieve and save and updated gameSession and let listeners update
-  handleUpdateGameMessage(session){
+  handleUpdateGameMessage(session) {
     // TODO Move gameSession to component
     this.gameSession = session;
     this.gameUpdateEvent.emit(session);
   }
 
   // Handle a game Result message
-  handleGameResultMessage(data){
-    console.log("Got Result: " ,data);
+  handleGameResultMessage(data) {
+    console.log("Got Result: ", data);
   }
 
 
@@ -70,13 +70,13 @@ export class GamesService extends Socket {
   /*
   Send updated game Session.
   */
-  sendUpdate(updateGame){
+  sendUpdate(updateGame) {
     // console.log("Send Update" + JSON.stringify(updateGame));
     this.emit("updateGame", updateGame);
   }
 
   // Submit a solution
-  sendPlayerResult(playerResultMessage){
+  sendPlayerResult(playerResultMessage) {
     // console.log("Send Playerresult" + JSON.stringify(playerResultMessage));
     this.emit("playerResult", playerResultMessage);
   }

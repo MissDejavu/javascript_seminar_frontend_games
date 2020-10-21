@@ -133,6 +133,7 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
 
   // Updates the current view with a recieved update
   handleRecievedUpdateGame(quizUpdate: QuizUpdate) {
+    console.log(quizUpdate)
     if (quizUpdate.quizes.length > 0) {
       this.currentQuiz = quizUpdate.quizes[quizUpdate.quizIndex];
     }

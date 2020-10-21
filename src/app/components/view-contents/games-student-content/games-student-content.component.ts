@@ -7,28 +7,29 @@ import { Component, OnInit, Input, isDevMode } from '@angular/core';
 })
 export class GamesStudentContentComponent implements OnInit {
 
-  constructor() { 
-    
+  constructor() {
+
   }
   selectedGame : String = "quiz";
   gameJoined : boolean = false;
   taskId : string = "taskId";
+
   @Input() sessionId: String;
   @Input() username: String;
 
 
   ngOnInit(): void {
   }
-  
+
   public onJoinGameButton() {
     this.gameJoined = true; 
   }
 
-  isSelected(game){
+  isSelected(game) {
     return game == this.selectedGame;
   }
 
-  onDisconnect() {
+  onDisconnect(event: string = "") {
     this.gameJoined = false;
   }
 
