@@ -54,6 +54,7 @@ export class GamesQuizComponent implements OnInit, OnDestroy {
         event.previousIndex,
         event.currentIndex);
     }
+    this.gamesService.sendUpdate(this.quizUpdate);
   }
 
   ngOnInit(): void {

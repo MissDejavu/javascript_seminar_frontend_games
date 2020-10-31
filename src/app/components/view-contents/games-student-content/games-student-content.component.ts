@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, isDevMode } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-games-student-content',
@@ -14,9 +16,9 @@ export class GamesStudentContentComponent implements OnInit {
   gameJoined : boolean = false;
   taskId : string = "taskId";
 
-  @Input() sessionId: String;
-  @Input() username: String;
-
+  sessionId: String = "sessionId";
+  username: String = "username";
+  types = ["Alias", "DrawIt", "Quiz"];
 
   ngOnInit(): void {
   }
@@ -32,6 +34,5 @@ export class GamesStudentContentComponent implements OnInit {
   onDisconnect(event: string = "") {
     this.gameJoined = false;
   }
-
 
 }

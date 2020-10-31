@@ -276,9 +276,15 @@ function handleQuizUpdateMessage(data) {
                         correctAnswers: question.answer,
                         selectedAnswers: [],
                         type: question.type,
-                        leftAnswers: question.options,
-                        rightAnswers: []
+                        leftAnswers: [],
+                        rightAnswers: [],
                     };
+                    // Shuffle answers
+                    if (question.type == "match") {
+                        let answers = shuffle(question.options);
+                        q.leftAnswers = answers.slice(0, Math.floor(answers.length / 2));
+                        q.rightAnswers = answers.splice(Math.floor(answers.length / 2), answers.length);
+                    }
                     data.quizes.push(q);
                 });
                 io.to(data.sessionId).emit("updateGame", data);
@@ -293,6 +299,12 @@ function handleQuizUpdateMessage(data) {
         openSessions.set(data.sessionId, data);
     }
 }
+
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+    return array;
+}
+
 
 // For Quiz give students also the correct result
 // For Alias and Drawit just forward the number of correct words!

@@ -3,6 +3,7 @@
     min-width: 300px;
     padding: 0;
     border: 2px solid rgba(0, 124, 124);
+    overflow: hidden;
 }
 
 .connecting {
@@ -25,7 +26,6 @@
 .game-content {
     padding: 1em;
     font-size: 130%;
-
 }
 
 .players-list {
@@ -48,7 +48,7 @@
     padding: 0.25em;
 }
 
-.settings{
+.settings {
     border-left: 2px solid rgba(0, 124, 124);
 }
 
@@ -71,15 +71,15 @@
 }
 
 .help {
-    position: fixed; 
+    position: fixed;
     z-index: 9999;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4); 
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .help-close {
@@ -91,8 +91,8 @@
     margin: 20% auto;
     padding: 1em;
     border: 1px solid #888;
-    width: 60%; 
-  }
+    width: 60%;
+}
 
 .help-button {
     background-color: rgb(0, 0, 0);
@@ -106,4 +106,4 @@
     height: 2em;
     font-weight: bold;
     font-size: 150%;
-  }
+}

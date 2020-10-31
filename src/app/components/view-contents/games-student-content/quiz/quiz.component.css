@@ -55,7 +55,8 @@
     background-color: rgb(236, 248, 248);
     min-width: 300px;
     padding: 0;
-    border: 2px solid rgba(0, 124, 124);
+    border: 2px solid rgb(196, 179, 223);
+    overflow: hidden;
 }
 
 .connecting {
@@ -65,8 +66,8 @@
 .game-header {
     font-family: "Lucida Console", Courier, monospace;
     font-weight: bold;
-    background: rgb(0, 124, 124);
-    color: rgba(255, 255, 255, 0.85);
+    background: rgb(196, 179, 223);
+    color: rgba(0, 0, 0, 0.85);
     padding: 1em;
 }
 
@@ -101,11 +102,11 @@
 }
 
 .settings {
-    border-left: 2px solid rgba(0, 124, 124);
+    border-left: 2px solid rgb(196, 179, 223);
 }
 
 .explaining {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(196, 179, 223, 0.75);
     font-size: 140%;
 }
 

@@ -1,15 +1,27 @@
 <div classname="games">
     <div *ngIf="!gameJoined" class="gameSelection">
-        <button (click)="onJoinGameButton()">Join Game</button>
         <br>
-        <select name="gameselection" [(ngModel)]="selectedGame" id="game">
-            <option value="quiz">Quiz</option>
-            <option value="alias">Alias</option>
-            <option value="drawit">Draw It</option>
-        </select>
-        <input [(ngModel)]="username">
-        <input [(ngModel)]="sessionId">
-        <input [(ngModel)]="taskId">
+        <mat-form-field appearance="fill">
+            <mat-label>Gametype</mat-label>
+            <mat-select [(ngModel)]="selectedGame" id="game">
+                <mat-option *ngFor="let type of types" [value]="type.toLocaleLowerCase()">{{type}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+            <mat-label>Username</mat-label>
+            <input [(ngModel)]="username" matInput placeholder="Peter" value="Sushi">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>SessionID</mat-label>
+            <input [(ngModel)]="sessionId" matInput placeholder="22222" value="11">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Task</mat-label>
+            <input [(ngModel)]="taskId" matInput placeholder="123adf" value="Sushi">
+        </mat-form-field>
+        <br>
+        <button class="btn btn-success" (click)="onJoinGameButton()">Join Game</button>
     </div>
 
     <div *ngIf="gameJoined && isSelected('quiz')" class="gameScreen">
